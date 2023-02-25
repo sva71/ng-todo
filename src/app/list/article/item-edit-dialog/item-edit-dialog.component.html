@@ -1,0 +1,22 @@
+<div mat-dialog-title class="dialog-title w-100 pt-2">
+    <span class="float-start">Редактирование элемента списка</span>
+    <mat-icon [mat-dialog-close]="null" role="button" class="float-end">close</mat-icon>
+</div>
+
+<mat-dialog-content class="mat-typography">
+    <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+        <mat-form-field class="w-100">
+            <mat-label>Содержание:</mat-label>
+            <input matInput type="text" formControlName="text">
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions class="px-4">
+    <button mat-raised-button [mat-dialog-close]="false">
+        Отмена
+    </button>
+    <button mat-raised-button color="primary" [disabled]="!editForm.valid" (click)="onSubmit()">
+        Сохранить
+    </button>
+</mat-dialog-actions>

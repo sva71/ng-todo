@@ -1,0 +1,47 @@
+<div mat-dialog-title class="dialog-title w-100 pt-2">
+    <span class="float-start">Редактирование заметки</span>
+    <mat-icon [mat-dialog-close]="null" role="button" class="float-end">close</mat-icon>
+</div>
+
+<mat-dialog-content class="mat-typography">
+    <form [formGroup]="articleForm">
+        <mat-form-field class="w-100">
+            <mat-label>Заголовок заметки</mat-label>
+            <input matInput type="text" formControlName="title">
+        </mat-form-field>
+        <ng-container formArrayName="list">
+            <div *ngFor="let todoItem of list.controls; let i = index">
+                <div class="todo-item-row position-relative d-flex flex-row justify-content-between align-items-baseline"
+                     [formGroup]="getItemGroup(todoItem)"
+                >
+                    <mat-form-field class="w-100">
+                        <input matInput type="text" formControlName="text">
+                    </mat-form-field>
+                    <mat-card class="item-buttons flex-row align-items-baseline">
+                        <button mat-icon-button [disabled]="!i" (click)="moveTodoItem(i, 1)">
+                            <mat-icon role="button" matTooltip="Вверх" (click)="deleteItem(i)">arrow_upward</mat-icon>
+                        </button>
+                        <button mat-icon-button [disabled]="i === list.controls.length - 1" (click)="moveTodoItem(i, -1)">
+                            <mat-icon role="button" matTooltip="Вниз" (click)="deleteItem(i)">arrow_downward</mat-icon>
+                        </button>
+                        <button mat-icon-button>
+                            <mat-icon role="button" matTooltip="Удалить" (click)="deleteItem(i)">delete</mat-icon>
+                        </button>
+                    </mat-card>
+                </div>
+            </div>
+        </ng-container>
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions class="d-flex flex-row justify-content-between px-4">
+    <div>
+    <button mat-raised-button [mat-dialog-close]="false">
+        Отмена
+    </button>
+    <button mat-raised-button color="primary" (click)="onSubmit()">
+        Сохранить
+    </button>
+    </div>
+    <button mat-raised-button color="accent" (click)="addTodoItem()">Добавить</button>
+</mat-dialog-actions>
