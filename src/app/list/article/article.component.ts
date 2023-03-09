@@ -1,29 +1,26 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ArticleItem, TodoItem} from "../../interfaces";
 import {TodoListService} from "../../todo-list.service";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {ConfirmDialogComponent} from "../../confirm-dialog/confirm-dialog.component";
 import {ItemEditDialogComponent} from "./item-edit-dialog/item-edit-dialog.component";
 import {ArticleEditDialogComponent} from "./article-edit-dialog/article-edit-dialog.component";
-import {Subject, takeUntil} from "rxjs";
 
 @Component({
   selector: 'app-article',
   templateUrl: './article.component.html',
   styleUrls: ['./article.component.scss']
 })
-export class ArticleComponent implements OnInit, OnDestroy {
+export class ArticleComponent implements OnInit {
 
     @Input() article: ArticleItem = null;
-
-    private destroy$ = new Subject<void>();
 
     list2: Array<TodoItem> = [];
 
     constructor(private todoService: TodoListService, private dialog: MatDialog) { }
 
     ngOnInit() {
-        this.todoService.articlesChanged$.pipe(takeUntil(this.destroy$)).subscribe(() => this.init1stArray());
+        this.init1stArray();
     }
 
     init1stArray() {
@@ -72,11 +69,6 @@ export class ArticleComponent implements OnInit, OnDestroy {
                 }
             }
         })
-    }
-
-    ngOnDestroy(): void {
-        this.destroy$.next();
-        this.destroy$.complete();
     }
 
 }

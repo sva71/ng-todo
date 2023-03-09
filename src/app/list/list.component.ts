@@ -1,15 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { TodoListService } from "../todo-list.service";
 import { Articles } from "../interfaces";
+import {Subject} from "rxjs";
 
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss']
 })
-export class ListComponent implements OnInit {
+export class ListComponent implements OnInit, OnDestroy {
 
     public articles: Articles = [];
+
+    private destroy$ = new Subject<void>();
 
     constructor(private todoService: TodoListService) {
     }
@@ -21,6 +24,11 @@ export class ListComponent implements OnInit {
             let i = this.articles.findIndex(item => item.id === newArticle.id);
             if (i >= 0) this.articles[i] = newArticle;
         })
+    }
+
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
 }
