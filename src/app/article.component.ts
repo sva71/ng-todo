@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ArticleItem, TodoItem } from "../../interfaces";
-import { TodoListService } from "../../todo-list.service";
+import { ArticleItem, TodoItem } from "./interfaces";
+import { TodoListService } from "./todo-list.service";
 import {MatDialog, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
-import { ConfirmDialogComponent } from "../../confirm-dialog/confirm-dialog.component";
-import { ItemEditDialogComponent } from "./item-edit-dialog/item-edit-dialog.component";
-import { ArticleEditDialogComponent } from "./article-edit-dialog/article-edit-dialog.component";
+import { ConfirmDialogComponent } from "./confirm-dialog.component";
+import { ItemEditDialogComponent } from "./item-edit-dialog.component";
+import { ArticleEditDialogComponent } from "./article-edit-dialog.component";
 import { take } from "rxjs";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatIconModule } from "@angular/material/icon";

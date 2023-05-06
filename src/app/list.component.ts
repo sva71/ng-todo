@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { TodoListService } from "../todo-list.service";
-import { ArticleItem, Articles } from "../interfaces";
+import { TodoListService } from "./todo-list.service";
+import { ArticleItem, Articles } from "./interfaces";
 import { take } from "rxjs";
-import { ArticleComponent } from "./article/article.component";
+import { ArticleComponent } from "./article.component";
 import { CommonModule } from "@angular/common";
 
 @Component({

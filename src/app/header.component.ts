@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
+import { ConfirmDialogComponent } from "./confirm-dialog.component";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
-import { TodoListService } from "../todo-list.service";
-import { ArticleEditDialogComponent } from "../list/article/article-edit-dialog/article-edit-dialog.component";
-import { Statistics } from "../interfaces";
+import { TodoListService } from "./todo-list.service";
+import { ArticleEditDialogComponent } from "./article-edit-dialog.component";
+import { Statistics } from "./interfaces";
 import { takeUntil } from "rxjs";
 import { MatButtonModule } from "@angular/material/button";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatIconModule } from "@angular/material/icon";
-import {DestroyService} from "../destroy.service";
+import {DestroyService} from "./destroy.service";
 
 @Component({
     selector: 'app-header',

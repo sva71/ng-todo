@@ -1,9 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
-import { ArticleItem } from "../../../interfaces";
-import { TodoListService } from "../../../todo-list.service";
-import { ItemEditDialogComponent } from "../item-edit-dialog/item-edit-dialog.component";
+import { ArticleItem } from "./interfaces";
+import { TodoListService } from "./todo-list.service";
+import { ItemEditDialogComponent } from "./item-edit-dialog.component";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatCardModule } from "@angular/material/card";
