@@ -1,15 +1,24 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ConfirmDialogComponent} from "../confirm-dialog/confirm-dialog.component";
-import {MatDialog, MatDialogRef} from "@angular/material/dialog";
-import {TodoListService} from "../todo-list.service";
-import {ArticleEditDialogComponent} from "../list/article/article-edit-dialog/article-edit-dialog.component";
-import {Statistics} from "../interfaces";
-import {Subject, takeUntil} from "rxjs";
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { TodoListService } from "../todo-list.service";
+import { ArticleEditDialogComponent } from "../list/article/article-edit-dialog/article-edit-dialog.component";
+import { Statistics } from "../interfaces";
+import { Subject, takeUntil } from "rxjs";
+import { MatButtonModule } from "@angular/material/button";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatIconModule } from "@angular/material/icon";
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+    selector: 'app-header',
+    templateUrl: './header.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatButtonModule,
+        MatIconModule,
+        MatTooltipModule
+    ],
+    standalone: true
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
@@ -21,7 +30,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.initStat();
         this.todoService.articlesChanged$.pipe(takeUntil(this.destroy$)).subscribe(() => this.initStat());
-        this.todoService.articleItemsChanged$.pipe(takeUntil(this.destroy$)).subscribe(() => this.initStat());
+        this.todoService.articleItemChanged$.pipe(takeUntil(this.destroy$)).subscribe(() => this.initStat());
     }
 
     initStat() {
@@ -50,7 +59,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
                 list: []
             }
         });
-        dialogRef.afterClosed().subscribe(result => this.todoService.createArticle(result));
+        dialogRef.afterClosed().subscribe(result => this.todoService.createArticle(result).subscribe({
+            next: () => {},
+            error: err => console.error(err)
+        }));
     }
 
     ngOnDestroy() {

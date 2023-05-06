@@ -1,9 +1,15 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {AbstractControl, FormArray, FormControl, FormGroup} from "@angular/forms";
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
-import {ArticleItem} from "../../../interfaces";
-import {TodoListService} from "../../../todo-list.service";
-import {ItemEditDialogComponent} from "../item-edit-dialog/item-edit-dialog.component";
+import { Component, Inject, OnInit } from '@angular/core';
+import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+import { ArticleItem } from "../../../interfaces";
+import { TodoListService } from "../../../todo-list.service";
+import { ItemEditDialogComponent } from "../item-edit-dialog/item-edit-dialog.component";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
+import { MatCardModule } from "@angular/material/card";
+import { MatButtonModule } from "@angular/material/button";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { CommonModule } from "@angular/common";
 
 interface ItemEditForm {
     done: FormControl<boolean>;
@@ -17,9 +23,20 @@ interface ArticleEditForm {
 }
 
 @Component({
-  selector: 'app-article-edit-dialog',
-  templateUrl: './article-edit-dialog.component.html',
-  styleUrls: ['./article-edit-dialog.component.scss']
+    selector: 'app-article-edit-dialog',
+    templateUrl: './article-edit-dialog.component.html',
+    styleUrls: ['./article-edit-dialog.component.scss'],
+    imports: [
+        CommonModule,
+        MatDialogModule,
+        MatIconModule,
+        ReactiveFormsModule,
+        MatInputModule,
+        MatCardModule,
+        MatButtonModule,
+        MatTooltipModule
+    ],
+    standalone: true
 })
 export class ArticleEditDialogComponent implements OnInit {
 

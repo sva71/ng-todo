@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {ArticleItem, Articles, Statistics} from "./interfaces";
-import {BehaviorSubject, Subject} from "rxjs";
+import {ArticleItem, Articles, Statistics, TodoItem} from "./interfaces";
+import {BehaviorSubject, Observable, of, Subject} from "rxjs";
 
 const DEFAULT_ARTICLES: Articles = [
     {
@@ -85,65 +85,60 @@ const DEFAULT_ARTICLES: Articles = [
   providedIn: 'root'
 })
 export class TodoListService {
-    private _articles: Articles = JSON.parse(localStorage.getItem('sv_todo')) || DEFAULT_ARTICLES;
 
-    public articlesChanged$ = new BehaviorSubject<Articles>(this._articles);
-    public articleItemsChanged$ = new Subject<ArticleItem>();
+    articles: Articles = JSON.parse(localStorage.getItem('sv_todo')) || DEFAULT_ARTICLES;
 
-    get articles(): Articles {
-        return this._articles;
-    }
-
-    set articles(value: Articles) {
-        this._articles = [...value];
-        this.articlesChanged$.next(value);
-    }
+    public articlesChanged$: BehaviorSubject<Articles> = new BehaviorSubject<Articles>(this.articles);
+    public articleItemChanged$: Subject<ArticleItem> = new Subject<ArticleItem>();
 
     constructor() {
-        this.articlesChanged$.subscribe(newArticles =>
+        this.articlesChanged$.subscribe(newArticles=>
             localStorage.setItem('sv_todo', JSON.stringify(newArticles)));
-        this.articleItemsChanged$.subscribe(() => localStorage.setItem('sv_todo', JSON.stringify(this.articles)));
+        this.articleItemChanged$.subscribe(() =>
+            localStorage.setItem('sv_todo', JSON.stringify(this.articles)));
     }
 
-    changeItemStatus(articleId: number, itemIndex: number) {
-        const article: ArticleItem = this.articles.find(item => item.id === articleId);
-        article.list[itemIndex].done = !article.list[itemIndex].done;
-        this.articleItemsChanged$.next(article);
+    getArticles = (): Observable<Articles> => of(this.articles);
+
+    updateTodoItem(articleId: number, itemIndex: number, payload: TodoItem): Observable<ArticleItem> {
+        const index = this.articles.findIndex(item => item.id === articleId);
+        this.articles[index].list[itemIndex] = payload;
+        this.articleItemChanged$.next(this.articles[index]);
+        return of(this.articles[index]);
     }
 
-    updateTodoItem(articleId: number, itemIndex: number, text: string) {
-        const article: ArticleItem = this.articles.find(item => item.id === articleId);
-        article.list[itemIndex].text = text;
-        this.articleItemsChanged$.next(article);
+    deleteTodoItem(articleId: number, itemIndex: number): Observable<ArticleItem> {
+        const index = this.articles.findIndex(item => item.id === articleId);
+        this.articles[index].list.splice(itemIndex, 1);
+        this.articleItemChanged$.next(this.articles[index]);
+        return of(this.articles[index]);
     }
 
-    deleteTodoItem(articleId: number, itemIndex: number) {
-        const article: ArticleItem = this.articles.find(item => item.id === articleId);
-        article.list.splice(itemIndex, 1);
-        this.articleItemsChanged$.next(article);
-    }
-
-    createArticle(articleData: ArticleItem) {
+    createArticle(articleData: ArticleItem): Observable<Articles> {
         articleData.id = this.articles[this.articles.length - 1].id + 1;
         this.articles.push(articleData);
         this.articlesChanged$.next(this.articles);
+        return of(this.articles);
     }
 
-    updateArticle(articleData: ArticleItem) {
-        const i = this.articles.findIndex(item => item.id === articleData.id)
-        this.articles[i] = articleData;
-        this.articleItemsChanged$.next(articleData);
+    updateArticle(articleData: ArticleItem): Observable<ArticleItem> {
+        const index = this.articles.findIndex(item => item.id === articleData.id);
+        this.articles[index] = articleData;
+        this.articleItemChanged$.next(this.articles[index]);
+        return of(this.articles[index]);
     }
 
-    deleteArticle(articleId: number) {
+    deleteArticle(articleId: number): Observable<Articles> {
         const index = this.articles.findIndex(item => item.id === articleId);
         index != -1 && this.articles.splice(index, 1);
         this.articlesChanged$.next(this.articles);
+        return of(this.articles);
     }
 
     clearLocalStorage() {
         localStorage.clear();
         this.articles = DEFAULT_ARTICLES;
+        this.articlesChanged$.next(this.articles);
     }
 
     getStatistics(): Statistics {

@@ -1,12 +1,25 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { TodoListService } from "../todo-list.service";
-import { Articles } from "../interfaces";
-import {Subject} from "rxjs";
+import { ArticleItem, Articles } from "../interfaces";
+import { Subject, take } from "rxjs";
+import { ArticleComponent } from "./article/article.component";
+import { CommonModule } from "@angular/common";
 
 @Component({
-  selector: 'app-list',
-  templateUrl: './list.component.html',
-  styleUrls: ['./list.component.scss']
+    selector: 'app-list',
+    template: `
+        <div class="w-auto p-4 d-flex flex-row justify-content-start align-items-start flex-wrap">
+            <div *ngFor="let article of articles">
+                <app-article [article]="article" (updated)="articleUpdated($event)"></app-article>
+            </div>
+        </div>
+    `,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CommonModule,
+        ArticleComponent
+    ],
+    standalone: true
 })
 export class ListComponent implements OnInit, OnDestroy {
 
@@ -14,16 +27,18 @@ export class ListComponent implements OnInit, OnDestroy {
 
     private destroy$ = new Subject<void>();
 
-    constructor(private todoService: TodoListService) {
-    }
+    constructor(private todoService: TodoListService) { }
 
     ngOnInit() {
-        this.articles = this.todoService.articles;
+        this.todoService.getArticles().pipe(take(1)).subscribe({
+            next: response => this.articles = response
+        });
         this.todoService.articlesChanged$.subscribe(newArticles => this.articles = newArticles);
-        this.todoService.articleItemsChanged$.subscribe(newArticle => {
-            let i = this.articles.findIndex(item => item.id === newArticle.id);
-            if (i >= 0) this.articles[i] = newArticle;
-        })
+    }
+
+    articleUpdated($event: ArticleItem) {
+        let i = this.articles.findIndex(item => item.id === $event.id);
+        if (i >= 0) this.articles[i] = $event;
     }
 
     ngOnDestroy(): void {

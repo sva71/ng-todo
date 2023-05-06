@@ -1,11 +1,21 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
+import { MatButtonModule } from "@angular/material/button";
 
 @Component({
-  selector: 'app-item-edit-dialog',
-  templateUrl: './item-edit-dialog.component.html',
-  styleUrls: ['./item-edit-dialog.component.scss']
+    selector: 'app-item-edit-dialog',
+    templateUrl: './item-edit-dialog.component.html',
+    imports: [
+        MatIconModule,
+        MatDialogModule,
+        ReactiveFormsModule,
+        MatInputModule,
+        MatButtonModule
+    ],
+    standalone: true
 })
 export class ItemEditDialogComponent implements OnInit {
 
