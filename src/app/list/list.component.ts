@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { TodoListService } from "../todo-list.service";
 import { ArticleItem, Articles } from "../interfaces";
-import { Subject, take } from "rxjs";
+import { take } from "rxjs";
 import { ArticleComponent } from "./article/article.component";
 import { CommonModule } from "@angular/common";
 
@@ -21,11 +21,9 @@ import { CommonModule } from "@angular/common";
     ],
     standalone: true
 })
-export class ListComponent implements OnInit, OnDestroy {
+export class ListComponent implements OnInit {
 
     public articles: Articles = [];
-
-    private destroy$ = new Subject<void>();
 
     constructor(private todoService: TodoListService) { }
 
@@ -39,11 +37,6 @@ export class ListComponent implements OnInit, OnDestroy {
     articleUpdated($event: ArticleItem) {
         let i = this.articles.findIndex(item => item.id === $event.id);
         if (i >= 0) this.articles[i] = $event;
-    }
-
-    ngOnDestroy(): void {
-        this.destroy$.next();
-        this.destroy$.complete();
     }
 
 }

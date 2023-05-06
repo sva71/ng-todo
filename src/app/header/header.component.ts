@@ -1,13 +1,14 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { TodoListService } from "../todo-list.service";
 import { ArticleEditDialogComponent } from "../list/article/article-edit-dialog/article-edit-dialog.component";
 import { Statistics } from "../interfaces";
-import { Subject, takeUntil } from "rxjs";
+import { takeUntil } from "rxjs";
 import { MatButtonModule } from "@angular/material/button";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatIconModule } from "@angular/material/icon";
+import {DestroyService} from "../destroy.service";
 
 @Component({
     selector: 'app-header',
@@ -20,12 +21,10 @@ import { MatIconModule } from "@angular/material/icon";
     ],
     standalone: true
 })
-export class HeaderComponent implements OnInit, OnDestroy {
-
-    private destroy$ = new Subject<void>();
+export class HeaderComponent implements OnInit {
 
     stat: Statistics;
-    constructor(private dialog: MatDialog, private todoService: TodoListService) { }
+    constructor(private dialog: MatDialog, private todoService: TodoListService, private destroy$: DestroyService) { }
 
     ngOnInit() {
         this.initStat();
@@ -63,11 +62,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
             next: () => {},
             error: err => console.error(err)
         }));
-    }
-
-    ngOnDestroy() {
-        this.destroy$.next();
-        this.destroy$.complete();
     }
 
 }
